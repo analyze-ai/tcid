@@ -1,1 +1,91 @@
+/* =========================================================
+   responsive.css
+   Tampilan untuk tablet & HP
+   ========================================================= */
 
+/* ===== Tablet (max 980px) ===== */
+@media (max-width: 980px){
+  .frame{
+    margin: 16px;
+  }
+}
+
+/* ===== HP / Tablet kecil (max 720px) ===== */
+@media (max-width: 720px){
+  .frame{
+    margin: 0;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+  }
+
+  .body-grid{
+    grid-template-columns: 1fr;
+  }
+
+  /* Sidebar jadi menu horizontal di atas konten */
+  .sidebar{
+    border-right: none;
+    border-bottom: 1px solid var(--line);
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 14px;
+  }
+
+  .nav-item{
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+
+  .nav-item.active::before{
+    display: none;
+  }
+
+  .content{
+    padding: 22px 18px;
+  }
+
+  .app-header{
+    padding: 14px 18px;
+  }
+
+  .brand{
+    font-size: 16px;
+  }
+
+  .upload-card{
+    padding: 26px 14px;
+  }
+
+  .analyze-wrap .btn-primary{
+    width: 100%;
+  }
+
+  .result-row{
+    font-size: 12.5px;
+  }
+}
+
+/* ===== HP kecil (max 420px) ===== */
+@media (max-width: 420px){
+  .version-tag{
+    font-size: 10px;
+    padding: 4px 8px;
+  }
+
+  .section-title{
+    font-size: 12px;
+  }
+
+  .result-box{
+    padding: 16px 14px;
+  }
+
+  .result-row{
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    padding: 10px 0;
+  }
+}
