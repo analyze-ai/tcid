@@ -1,7 +1,7 @@
 /* ==========================================
    Analyze-AI
    CSV Engine
-   Version : v0.2.0
+   Version : v1.0.0
 ========================================== */
 
 /* ==========================================
@@ -20,7 +20,7 @@ function readCSV(file) {
 
         const reader = new FileReader();
 
-        reader.onload = function (event) {
+        reader.onload = (event) => {
 
             try {
 
@@ -38,9 +38,13 @@ function readCSV(file) {
 
         };
 
-        reader.onerror = () => reject("Failed to read CSV file.");
+        reader.onerror = () => {
 
-        reader.readAsText(file);
+            reject(new Error("Failed to read CSV file."));
+
+        };
+
+        reader.readAsText(file, "UTF-8");
 
     });
 
@@ -78,7 +82,9 @@ function parseCSV(text) {
         .filter(row => row.trim() !== "");
 
     if (rows.length < 2) {
+
         throw new Error("CSV contains no data.");
+
     }
 
     const headers = rows.shift()
@@ -87,16 +93,28 @@ function parseCSV(text) {
 
     const columns = detectColumns(headers);
 
+    validateColumns(columns);
+
     const data = [];
 
-    rows.forEach(row => {
+    rows.forEach((row, index) => {
 
         const values = row.split(delimiter);
+
+        if (values.length < headers.length) {
+
+            console.warn(`Skipping invalid row ${index + 2}`);
+
+            return;
+
+        }
 
         const candle = normalizeRow(values, columns);
 
         if (candle) {
+
             data.push(candle);
+
         }
 
     });
@@ -105,44 +123,48 @@ function parseCSV(text) {
 
 }
 
-function detectColumns(headers){
+/* ==========================================
+   DETECT COLUMN
+========================================== */
 
-    const find = (...names)=>{
+function detectColumns(headers) {
 
-        return headers.findIndex(h=>names.includes(h));
+    const find = (...names) =>
+        headers.findIndex(h => names.includes(h));
 
-    };
+    return {
 
-    return{
-
-        date:find(
+        date: find(
             "date",
             "datetime",
-            "timestamp",
+            "timestamp"
+        ),
+
+        time: find(
             "time"
         ),
 
-        open:find(
+        open: find(
             "open",
             "o"
         ),
 
-        high:find(
+        high: find(
             "high",
             "h"
         ),
 
-        low:find(
+        low: find(
             "low",
             "l"
         ),
 
-        close:find(
+        close: find(
             "close",
             "c"
         ),
 
-        volume:find(
+        volume: find(
             "volume",
             "tick volume",
             "vol",
@@ -153,92 +175,185 @@ function detectColumns(headers){
 
 }
 
-function normalizeRow(values, columns){
+/* ==========================================
+   VALIDATE COLUMN
+========================================== */
 
-    if(
-        columns.open===-1||
-        columns.high===-1||
-        columns.low===-1||
-        columns.close===-1
-    ){
+function validateColumns(columns) {
 
-        return null;
+    const required = [
 
-    }
+        "open",
+        "high",
+        "low",
+        "close"
 
-    return{
+    ];
 
-        date:
-            columns.date>=0
-                ? values[columns.date].trim()
-                : "",
+    required.forEach(column => {
 
-        open:Number(values[columns.open]),
+        if (columns[column] === -1) {
 
-        high:Number(values[columns.high]),
+            throw new Error(`Missing required column: ${column}`);
 
-        low:Number(values[columns.low]),
-
-        close:Number(values[columns.close]),
-
-        volume:
-            columns.volume>=0
-                ? Number(values[columns.volume])
-                : 0
-
-    };
-
-}
-
-function validateData(data){
-
-    return data.filter(candle=>{
-
-        return(
-
-            !isNaN(candle.open)&&
-            !isNaN(candle.high)&&
-            !isNaN(candle.low)&&
-            !isNaN(candle.close)
-
-        );
+        }
 
     });
 
 }
 
-
-
 /* ==========================================
-   MARKET INFO
+   NORMALIZE ROW
 ========================================== */
 
-function getMarketInfo() {
+function normalizeRow(values, columns) {
 
-    if (marketData.length === 0) return null;
+    const get = (index) => {
+
+        if (index < 0) return "";
+
+        return values[index].trim();
+
+    };
+
+    let date = "";
+
+    if (columns.date >= 0) {
+
+        date = get(columns.date);
+
+    }
+
+    if (columns.time >= 0) {
+
+        date += " " + get(columns.time);
+
+    }
 
     return {
 
-        candles: marketData.length,
+        date: date.trim(),
 
-        startDate: marketData[0].date,
+        open: Number(get(columns.open)),
 
-        endDate: marketData[marketData.length - 1].date,
+        high: Number(get(columns.high)),
 
-        lastPrice: marketData[marketData.length - 1].close,
+        low: Number(get(columns.low)),
 
-        volume: marketData[marketData.length - 1].volume
+        close: Number(get(columns.close)),
+
+        volume: columns.volume >= 0
+            ? Number(get(columns.volume))
+            : 0
 
     };
 
 }
 
 /* ==========================================
-   GET DATA
+   VALIDATE DATA
+========================================== */
+
+function validateData(data) {
+
+    return data.filter(candle => {
+
+        if (
+
+            isNaN(candle.open) ||
+            isNaN(candle.high) ||
+            isNaN(candle.low) ||
+            isNaN(candle.close)
+
+        ) {
+
+            return false;
+
+        }
+
+        if (candle.high < candle.low) {
+
+            return false;
+
+        }
+
+        if (candle.high < candle.open) {
+
+            return false;
+
+        }
+
+        if (candle.high < candle.close) {
+
+            return false;
+
+        }
+
+        if (candle.low > candle.open) {
+
+            return false;
+
+        }
+
+        if (candle.low > candle.close) {
+
+            return false;
+
+        }
+
+        return true;
+
+    });
+
+}
+
+/* ==========================================
+   MARKET INFORMATION
+========================================== */
+
+function getMarketInfo() {
+
+    if (marketData.length === 0) {
+
+        return null;
+
+    }
+
+    const first = marketData[0];
+    const last = marketData[marketData.length - 1];
+
+    return {
+
+        candles: marketData.length,
+
+        startDate: first.date,
+
+        endDate: last.date,
+
+        lastPrice: last.close,
+
+        volume: last.volume
+
+    };
+
+}
+
+/* ==========================================
+   GET MARKET DATA
 ========================================== */
 
 function getMarketData() {
 
-    return marketData;
+    return [...marketData];
+
+}
+
+/* ==========================================
+   CLEAR DATA
+========================================== */
+
+function clearMarketData() {
+
+    marketData = [];
 
 }
