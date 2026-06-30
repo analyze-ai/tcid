@@ -32,3 +32,13 @@ fileInput.addEventListener("change", function () {
     analyzeBtn.disabled = false;
 
 });
+/* ==========================================
+   ANALYZE BUTTON
+========================================== */
+
+analyzeBtn.addEventListener("click", () => {
+
+    statusVal.textContent = "Analyzing...";
+    statusVal.className = "val waiting";
+
+});
