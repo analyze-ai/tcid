@@ -36,9 +36,31 @@ fileInput.addEventListener("change", function () {
    ANALYZE BUTTON
 ========================================== */
 
+const spinner = document.getElementById("spinner");
+const btnLabel = document.getElementById("btnLabel");
+
 analyzeBtn.addEventListener("click", () => {
 
-    statusVal.textContent = "Analyzing...";
+    spinner.style.display = "inline-block";
+
+    btnLabel.textContent = "Analyzing...";
+
+    analyzeBtn.disabled = true;
+
+    statusVal.textContent = "Analyzing CSV...";
     statusVal.className = "val waiting";
+
+    setTimeout(() => {
+
+        spinner.style.display = "none";
+
+        btnLabel.textContent = "Analyze";
+
+        analyzeBtn.disabled = false;
+
+        statusVal.textContent = "Analysis Complete";
+        statusVal.className = "val success";
+
+    },2000);
 
 });
