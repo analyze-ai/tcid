@@ -1,1 +1,79 @@
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Analyze-AI</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="dashboard.css">
+<link rel="stylesheet" href="responsive.css">
+</head>
+<body>
 
+<div class="frame">
+
+  <!-- HEADER -->
+  <header class="app-header">
+    <div class="brand">
+      <span class="dot pulse"></span>
+      Analyze-AI
+    </div>
+    <div class="version-tag">Version 0.1.0</div>
+  </header>
+
+  <div class="body-grid">
+
+    <!-- SIDEBAR -->
+    <nav class="sidebar">
+      <a class="nav-item active">Dashboard</a>
+      <a class="nav-item">Analysis</a>
+      <a class="nav-item">History</a>
+      <a class="nav-item">Settings</a>
+    </nav>
+
+    <!-- CONTENT -->
+    <div class="content">
+
+      <div class="section-title">Upload CSV</div>
+      <div class="upload-card" id="dropzone">
+        <svg class="upicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+          <path d="M12 16V4"/><path d="M7 9l5-5 5 5"/><path d="M4 16v3a2 2 0 002 2h12a2 2 0 002-2v-3"/>
+        </svg>
+        <p class="hint">Seret file CSV ke sini, atau pilih file secara manual</p>
+        <button class="btn btn-outline" id="chooseBtn" type="button">Choose File</button>
+        <input type="file" id="fileInput" accept=".csv">
+        <div class="file-name" id="fileName"></div>
+      </div>
+
+      <div class="analyze-wrap">
+        <button class="btn btn-primary" id="analyzeBtn" disabled>
+          <div class="spinner" id="spinner"></div>
+          <span id="btnLabel">Analyze</span>
+        </button>
+      </div>
+
+      <hr class="divider">
+
+      <div class="section-title">Result</div>
+      <div class="result-box">
+        <div class="result-row">
+          <span class="key">Trend</span>
+          <span class="val waiting" id="trendVal">-</span>
+        </div>
+        <div class="result-row">
+          <span class="key">Swing</span>
+          <span class="val waiting" id="swingVal">-</span>
+        </div>
+        <div class="result-row">
+          <span class="key">Status</span>
+          <span class="val waiting" id="statusVal">Waiting...</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+
+</body>
+</html>
