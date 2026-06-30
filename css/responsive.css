@@ -1,99 +1,15 @@
 <style>
-/* =========================================================
-   responsive.css
-   Tampilan untuk tablet & HP
-   ========================================================= */
+/* ==============================
+   Responsive
+============================== */
 
-/* ===== Tablet (max 980px) ===== */
-@media (max-width: 980px){
-  .app{
-    margin: 16px;
-  }
-}
+@media(max-width:768px){
 
-/* ===== HP / Tablet kecil (max 720px) ===== */
-@media (max-width: 720px){
-  .app{
-    margin: 0;
-    border-radius: 0;
-    border-left: none;
-    border-right: none;
-    grid-template-columns: 1fr;
-    grid-template-areas:
-      "header"
-      "sidebar"
-      "main";
-  }
+    .app{
 
-  /* Sidebar jadi menu horizontal di atas main */
-  .sidebar{
-    border-right: none;
-    border-bottom: 1px solid var(--line);
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: 8px;
-    padding: 14px;
-  }
+        flex-direction:column;
 
-  .nav-item{
-    padding: 8px 12px;
-    font-size: 13px;
-  }
+    }
 
-  .nav-item.active::before{
-    display: none;
-  }
-
-  .main{
-    padding: 22px 18px;
-    gap: 18px;
-  }
-
-  .header{
-    padding: 14px 18px;
-  }
-
-  .brand{
-    font-size: 16px;
-  }
-
-  .card{
-    padding: 18px 16px;
-  }
-
-  .upload-card{
-    padding: 26px 14px;
-  }
-
-  .analyze-card .btn-primary{
-    width: 100%;
-  }
-
-  .result-row{
-    font-size: 12.5px;
-  }
-}
-
-/* ===== HP kecil (max 420px) ===== */
-@media (max-width: 420px){
-  .version-tag{
-    font-size: 10px;
-    padding: 4px 8px;
-  }
-
-  .section-title{
-    font-size: 12px;
-  }
-
-  .card{
-    padding: 14px 12px;
-  }
-
-  .result-row{
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 4px;
-    padding: 10px 0;
-  }
 }
 </style>
