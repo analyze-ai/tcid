@@ -72,45 +72,142 @@ function parseCSV(text) {
 
     const delimiter = detectDelimiter(text);
 
-    const rows = text.trim().split(/\r?\n/);
+    const rows = text
+        .trim()
+        .split(/\r?\n/)
+        .filter(row => row.trim() !== "");
 
     if (rows.length < 2) {
-
-        throw new Error("CSV file is empty.");
-
+        throw new Error("CSV contains no data.");
     }
 
-    const headers = rows.shift().split(delimiter);
+    const headers = rows.shift()
+        .split(delimiter)
+        .map(h => h.trim().toLowerCase());
+
+    const columns = detectColumns(headers);
 
     const data = [];
 
-    rows.forEach((row) => {
-
-        if (!row.trim()) return;
+    rows.forEach(row => {
 
         const values = row.split(delimiter);
 
-        data.push({
+        const candle = normalizeRow(values, columns);
 
-            date: values[0]?.trim(),
-
-            open: Number(values[1]),
-
-            high: Number(values[2]),
-
-            low: Number(values[3]),
-
-            close: Number(values[4]),
-
-            volume: Number(values[5] ?? 0)
-
-        });
+        if (candle) {
+            data.push(candle);
+        }
 
     });
 
-    return data;
+    return validateData(data);
 
 }
+
+function detectColumns(headers){
+
+    const find = (...names)=>{
+
+        return headers.findIndex(h=>names.includes(h));
+
+    };
+
+    return{
+
+        date:find(
+            "date",
+            "datetime",
+            "timestamp",
+            "time"
+        ),
+
+        open:find(
+            "open",
+            "o"
+        ),
+
+        high:find(
+            "high",
+            "h"
+        ),
+
+        low:find(
+            "low",
+            "l"
+        ),
+
+        close:find(
+            "close",
+            "c"
+        ),
+
+        volume:find(
+            "volume",
+            "tick volume",
+            "vol",
+            "v"
+        )
+
+    };
+
+}
+
+function normalizeRow(values, columns){
+
+    if(
+        columns.open===-1||
+        columns.high===-1||
+        columns.low===-1||
+        columns.close===-1
+    ){
+
+        return null;
+
+    }
+
+    return{
+
+        date:
+            columns.date>=0
+                ? values[columns.date].trim()
+                : "",
+
+        open:Number(values[columns.open]),
+
+        high:Number(values[columns.high]),
+
+        low:Number(values[columns.low]),
+
+        close:Number(values[columns.close]),
+
+        volume:
+            columns.volume>=0
+                ? Number(values[columns.volume])
+                : 0
+
+    };
+
+}
+
+function validateData(data){
+
+    return data.filter(candle=>{
+
+        return(
+
+            !isNaN(candle.open)&&
+            !isNaN(candle.high)&&
+            !isNaN(candle.low)&&
+            !isNaN(candle.close)
+
+        );
+
+    });
+
+}
+
+
 
 /* ==========================================
    MARKET INFO
