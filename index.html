@@ -1,95 +1,305 @@
 <html lang="id">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Analyze-AI</title>
-<link rel="stylesheet" href="css/style.css">
-<link rel="stylesheet" href="css/dashboard.css">
-<link rel="stylesheet" href="css/responsive.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Analyze-AI | AI Trading Analysis Platform</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/responsive.css">
 </head>
+
 <body>
 
 <div class="app">
 
-  <!-- HEADER -->
-  <header class="header">
-    <div class="brand">
-      <span class="dot pulse"></span>
-      Analyze-AI
-    </div>
-    <div class="version-tag">Version 0.1.0</div>
-  </header>
+    <!-- ==========================================
+         HEADER
+    =========================================== -->
+    <header class="header">
 
-  <!-- SIDEBAR -->
-  <nav class="sidebar">
-    <a class="nav-item active">Dashboard</a>
-    <a class="nav-item">Analysis</a>
-    <a class="nav-item">History</a>
-    <a class="nav-item">Settings</a>
-  </nav>
+        <div class="brand">
 
-  <!-- MAIN -->
-  <main class="main">
+            <img src="assets/logo.png" alt="Analyze-AI Logo" class="logo">
 
-    <!-- UPLOAD CARD -->
-    <section class="card upload-card" id="dropzone">
-      <div class="section-title"><span class="title-icon">📂</span> Upload Historical Data</div>
-      <svg class="upicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-        <path d="M12 16V4"/><path d="M7 9l5-5 5 5"/><path d="M4 16v3a2 2 0 002 2h12a2 2 0 002-2v-3"/>
-      </svg>
-      <p class="hint">Seret file CSV ke sini, atau pilih file secara manual</p>
-      <button class="btn btn-outline" id="chooseBtn" type="button">Choose CSV</button>
-      <input type="file" id="fileInput" accept=".csv">
-      <div class="file-name" id="fileName"></div>
-    </section>
+            <div class="brand-text">
+                <h1>Analyze-AI</h1>
+                <span>AI Trading Analysis Platform</span>
+            </div>
 
-    <!-- ANALYZE CARD -->
-    <section class="card analyze-card">
-      <button class="btn btn-primary" id="analyzeBtn" disabled>
-        <div class="spinner" id="spinner"></div>
-        <span id="btnLabel">Analyze</span>
-      </button>
-    </section>
+        </div>
 
-    <!-- RESULT CARD -->
-    <section class="card result-card">
-      <div class="section-title">Market Information</div>
-      <div class="result-row">
-        <span class="key">Symbol</span>
-        <span class="val waiting" id="symbolVal">-</span>
-      </div>
-      <div class="result-row">
-        <span class="key">Last Price</span>
-        <span class="val waiting" id="priceVal">-</span>
-      </div>
-      <div class="result-row">
-        <span class="key">Volume</span>
-        <span class="val waiting" id="volumeVal">-</span>
-      </div>
+        <div class="version-tag">
+            v0.1.0 Alpha
+        </div>
 
-      <hr class="divider">
+    </header>
 
-      <div class="section-title">Result</div>
-      <div class="result-row">
-        <span class="key">Trend</span>
-        <span class="val waiting" id="trendVal">-</span>
-      </div>
-      <div class="result-row">
-        <span class="key">Swing</span>
-        <span class="val waiting" id="swingVal">-</span>
-      </div>
-    </section>
+    <!-- ==========================================
+         SIDEBAR
+    =========================================== -->
+    <nav class="sidebar">
 
-    <!-- STATUS CARD -->
-    <section class="card status-card">
-      <div class="section-title">Status</div>
-      <div class="result-row">
-        <span class="key">Engine</span>
-        <span class="val waiting" id="statusVal">Waiting...</span>
-      </div>
-    </section>
+        <ul>
 
-  </main>
+            <li class="active">
+                <a href="#">Dashboard</a>
+            </li>
+
+            <li>
+                <a href="#">Analysis</a>
+            </li>
+
+            <li>
+                <a href="#">History</a>
+            </li>
+
+            <li>
+                <a href="#">Settings</a>
+            </li>
+
+        </ul>
+
+    </nav>
+
+    <!-- ==========================================
+         MAIN CONTENT
+    =========================================== -->
+    <main class="main">
+
+        <section class="content-grid">
+
+            <!-- Upload CSV -->
+            <section class="card upload-card" id="dropzone">
+
+                <div class="section-title">
+                    📂 Upload Historical Data
+                </div>
+
+                <svg class="upicon"
+                     viewBox="0 0 24 24"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="1.6">
+
+                    <path d="M12 16V4"/>
+                    <path d="M7 9l5-5 5 5"/>
+                    <path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/>
+
+                </svg>
+
+                <p class="hint">
+                    Drag & Drop CSV file here
+                    <br>
+                    or choose a file manually.
+                </p>
+
+                <label for="fileInput" class="btn btn-outline">
+                    Choose CSV
+                </label>
+
+                <input
+                    type="file"
+                    id="fileInput"
+                    accept=".csv"
+                    hidden>
+
+                <div class="file-name" id="fileName">
+                    No file selected
+                </div>
+
+            </section>
+
+            <!-- Analyze -->
+            <section class="card analyze-card">
+
+                <button
+                    class="btn btn-primary"
+                    id="analyzeBtn"
+                    disabled>
+
+                    <div class="spinner" id="spinner"></div>
+
+                    <span id="btnLabel">
+                        Analyze
+                    </span>
+
+                </button>
+
+            </section>
+
+            <!-- Market Information -->
+            <section class="card result-card">
+
+                <div class="section-title">
+                    Market Information
+                </div>
+
+                <div class="result-row">
+                    <span class="key">Symbol</span>
+                    <span class="val waiting" id="symbolVal">-</span>
+                </div>
+
+                <div class="result-row">
+                    <span class="key">Timeframe</span>
+                    <span class="val waiting" id="timeframeVal">-</span>
+                </div>
+
+                <div class="result-row">
+                    <span class="key">Total Candles</span>
+                    <span class="val waiting" id="candleVal">-</span>
+                </div>
+
+                <div class="result-row">
+                    <span class="key">Start Date</span>
+                    <span class="val waiting" id="startDateVal">-</span>
+                </div>
+
+                <div class="result-row">
+                    <span class="key">End Date</span>
+                    <span class="val waiting" id="endDateVal">-</span>
+                </div>
+
+                <div class="result-row">
+                    <span class="key">Last Price</span>
+                    <span class="val waiting" id="priceVal">-</span>
+                </div>
+
+                <div class="result-row">
+                    <span class="key">Volume</span>
+                    <span class="val waiting" id="volumeVal">-</span>
+                </div>
+
+            </section>
+
+            <!-- Analysis Result -->
+            <section class="card result-card">
+
+                <div class="section-title">
+                    Analysis Result
+                </div>
+
+                <div class="result-row">
+                    <span class="key">Trend</span>
+                    <span class="val waiting" id="trendVal">-</span>
+                </div>
+
+                <div class="result-row">
+                    <span class="key">Market Structure</span>
+                    <span class="val waiting" id="structureVal">-</span>
+                </div>
+
+                <div class="result-row">
+                    <span class="key">Swing High</span>
+                    <span class="val waiting" id="swingHighVal">-</span>
+                </div>
+
+                <div class="result-row">
+                    <span class="key">Swing Low</span>
+                    <span class="val waiting" id="swingLowVal">-</span>
+                </div>
+
+                <div class="result-row">
+                    <span class="key">Break of Structure</span>
+                    <span class="val waiting" id="bosVal">-</span>
+                </div>
+
+                <div class="result-row">
+                    <span class="key">CHoCH</span>
+                    <span class="val waiting" id="chochVal">-</span>
+                </div>
+
+                <div class="result-row">
+                    <span class="key">Liquidity</span>
+                    <span class="val waiting" id="liquidityVal">-</span>
+                </div>
+
+            </section>
+
+            <!-- Trade Setup -->
+            <section class="card result-card">
+
+                <div class="section-title">
+                    Trade Setup
+                </div>
+
+                <div class="result-row">
+                    <span class="key">Entry</span>
+                    <span class="val waiting" id="entryVal">-</span>
+                </div>
+
+                <div class="result-row">
+                    <span class="key">Stop Loss</span>
+                    <span class="val waiting" id="slVal">-</span>
+                </div>
+
+                <div class="result-row">
+                    <span class="key">Take Profit</span>
+                    <span class="val waiting" id="tpVal">-</span>
+                </div>
+
+                <div class="result-row">
+                    <span class="key">Risk Reward</span>
+                    <span class="val waiting" id="rrVal">-</span>
+                </div>
+
+                <div class="result-row">
+                    <span class="key">Probability</span>
+                    <span class="val waiting" id="probabilityVal">-</span>
+                </div>
+
+                <div class="result-row">
+                    <span class="key">Confidence</span>
+                    <span class="val waiting" id="confidenceVal">-</span>
+                </div>
+
+            </section>
+
+            <!-- Engine Status -->
+            <section class="card status-card">
+
+                <div class="section-title">
+                    Engine Status
+                </div>
+
+                <div class="result-row">
+                    <span class="key">Engine</span>
+                    <span class="val success" id="engineVal">
+                        Ready
+                    </span>
+                </div>
+
+                <div class="result-row">
+                    <span class="key">CSV Status</span>
+                    <span class="val waiting" id="csvStatusVal">
+                        No File
+                    </span>
+                </div>
+
+                <div class="result-row">
+                    <span class="key">Analysis</span>
+                    <span class="val waiting" id="statusVal">
+                        Waiting...
+                    </span>
+                </div>
+
+            </section>
+
+        </section>
+
+    </main>
+
+    <!-- ==========================================
+         FOOTER
+    =========================================== -->
+    <footer class="footer">
+
+        Analyze-AI v0.1.0 Alpha © 2026
+
+    </footer>
+
 </div>
 
 <script src="js/app.js"></script>
