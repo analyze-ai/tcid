@@ -1,11 +1,11 @@
 <style>
 /* =========================================================
    dashboard.css
-   Layout dashboard: header, sidebar, konten utama
+   Layout dashboard: header, sidebar, main (kumpulan card)
    ========================================================= */
 
-/* ===== Frame utama ===== */
-.frame{
+/* ===== App: grid utama ===== */
+.app{
   max-width: 1100px;
   margin: 28px auto;
   border: 1px solid var(--line);
@@ -13,10 +13,18 @@
   overflow: hidden;
   background: var(--panel);
   box-shadow: 0 0 0 1px rgba(57,255,176,0.03), 0 30px 60px -30px rgba(0,0,0,0.6);
+
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  grid-template-rows: auto 1fr;
+  grid-template-areas:
+    "header header"
+    "sidebar main";
 }
 
 /* ===== Header ===== */
-.app-header{
+.header{
+  grid-area: header;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -44,15 +52,9 @@
   letter-spacing: 0.5px;
 }
 
-/* ===== Body grid: sidebar | konten ===== */
-.body-grid{
-  display: grid;
-  grid-template-columns: 200px 1fr;
-  min-height: 560px;
-}
-
 /* ===== Sidebar ===== */
 .sidebar{
+  grid-area: sidebar;
   border-right: 1px solid var(--line);
   background: var(--panel);
   padding: 22px 14px;
@@ -96,9 +98,21 @@
   border-radius: 2px;
 }
 
-/* ===== Konten ===== */
-.content{
+/* ===== Main: kumpulan card ===== */
+.main{
+  grid-area: main;
   padding: 30px 34px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ===== Card dasar ===== */
+.card{
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 22px 24px;
 }
 
 .section-title{
@@ -120,7 +134,6 @@
   border-radius: 50%;
   box-shadow: 0 0 8px var(--accent);
 }
-
 .section-title .title-icon{
   font-size: 14px;
   filter: grayscale(0.2);
@@ -128,12 +141,14 @@
 
 /* ===== Upload card ===== */
 .upload-card{
-  border: 1.5px dashed var(--line);
-  border-radius: 12px;
-  padding: 36px 20px;
   text-align: center;
-  background: var(--panel-2);
+  border-style: dashed;
+  border-width: 1.5px;
   transition: all .2s ease;
+}
+.upload-card .section-title{
+  justify-content: flex-start;
+  text-align: left;
 }
 .upload-card.drag{
   border-color: var(--accent);
@@ -161,30 +176,22 @@ input[type=file]{ display: none; }
   color: var(--accent);
 }
 
-.analyze-wrap{
+/* ===== Analyze card ===== */
+.analyze-card{
   text-align: center;
-  margin-top: 22px;
 }
-
-.analyze-wrap .btn-primary{
+.analyze-card .btn-primary{
   width: 220px;
 }
 
-/* ===== Divider ===== */
+/* ===== Divider (dipakai di dalam result-card) ===== */
 .divider{
   border: none;
   border-top: 1px solid var(--line);
-  margin: 32px 0 26px;
+  margin: 20px 0;
 }
 
-/* ===== Result ===== */
-.result-box{
-  background: var(--panel-2);
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  padding: 22px 24px;
-}
-
+/* ===== Baris key-value (result-card & status-card) ===== */
 .result-row{
   display: flex;
   align-items: center;
