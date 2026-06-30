@@ -6,25 +6,26 @@
 
 /* ===== Tablet (max 980px) ===== */
 @media (max-width: 980px){
-  .frame{
+  .app{
     margin: 16px;
   }
 }
 
 /* ===== HP / Tablet kecil (max 720px) ===== */
 @media (max-width: 720px){
-  .frame{
+  .app{
     margin: 0;
     border-radius: 0;
     border-left: none;
     border-right: none;
-  }
-
-  .body-grid{
     grid-template-columns: 1fr;
+    grid-template-areas:
+      "header"
+      "sidebar"
+      "main";
   }
 
-  /* Sidebar jadi menu horizontal di atas konten */
+  /* Sidebar jadi menu horizontal di atas main */
   .sidebar{
     border-right: none;
     border-bottom: 1px solid var(--line);
@@ -43,11 +44,12 @@
     display: none;
   }
 
-  .content{
+  .main{
     padding: 22px 18px;
+    gap: 18px;
   }
 
-  .app-header{
+  .header{
     padding: 14px 18px;
   }
 
@@ -55,11 +57,15 @@
     font-size: 16px;
   }
 
+  .card{
+    padding: 18px 16px;
+  }
+
   .upload-card{
     padding: 26px 14px;
   }
 
-  .analyze-wrap .btn-primary{
+  .analyze-card .btn-primary{
     width: 100%;
   }
 
@@ -79,8 +85,8 @@
     font-size: 12px;
   }
 
-  .result-box{
-    padding: 16px 14px;
+  .card{
+    padding: 14px 12px;
   }
 
   .result-row{
