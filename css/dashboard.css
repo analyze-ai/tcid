@@ -1,3 +1,4 @@
+<style>
 /* =========================================================
    dashboard.css
    Layout dashboard: header, sidebar, konten utama
@@ -120,6 +121,11 @@
   box-shadow: 0 0 8px var(--accent);
 }
 
+.section-title .title-icon{
+  font-size: 14px;
+  filter: grayscale(0.2);
+}
+
 /* ===== Upload card ===== */
 .upload-card{
   border: 1.5px dashed var(--line);
@@ -194,3 +200,4 @@ input[type=file]{ display: none; }
 .result-row .val.waiting{ color: var(--text-dim); font-weight: 400; font-style: italic; }
 .result-row .val.up{ color: var(--accent); }
 .result-row .val.down{ color: var(--danger); }
+</style>
