@@ -11,6 +11,50 @@
 let marketData = [];
 
 /* ==========================================
+   CSV WARNINGS
+========================================== */
+
+let csvWarnings = [];
+
+/* ==========================================
+   ADD WARNING
+========================================== */
+
+function addWarning(type, row, message) {
+
+    csvWarnings.push({
+
+        type,
+        row,
+        message
+
+    });
+
+}
+
+/* ==========================================
+   CLEAR WARNINGS
+========================================== */
+
+function clearWarnings() {
+
+    csvWarnings = [];
+
+}
+
+/* ==========================================
+   GET WARNINGS
+========================================== */
+
+function getWarnings() {
+
+    return [...csvWarnings];
+
+}
+
+
+
+/* ==========================================
    READ CSV FILE
 ========================================== */
 
@@ -95,7 +139,7 @@ function parseCSV(text) {
 
     validateColumns(columns);
 
-    const data = [];
+    clearWarnings();
 
     rows.forEach((row, index) => {
 
@@ -103,11 +147,19 @@ function parseCSV(text) {
 
         if (values.length < headers.length) {
 
-            console.warn(`Skipping invalid row ${index + 2}`);
+    addWarning(
 
-            return;
+        "INVALID_COLUMN",
 
-        }
+        index + 2,
+
+        "Number of columns does not match header."
+
+    );
+
+    return;
+
+}
 
         const candle = normalizeRow(values, columns);
 
@@ -253,10 +305,11 @@ function normalizeRow(values, columns) {
 /* ==========================================
    VALIDATE DATA
 ========================================== */
-
 function validateData(data) {
 
-    return data.filter(candle => {
+    const validData = [];
+
+    data.forEach((candle, index) => {
 
         if (
 
@@ -267,43 +320,105 @@ function validateData(data) {
 
         ) {
 
-            return false;
+            addWarning(
+
+                "INVALID_NUMBER",
+
+                index + 2,
+
+                "OHLC contains invalid number."
+
+            );
+
+            return;
 
         }
 
         if (candle.high < candle.low) {
 
-            return false;
+            addWarning(
+
+                "INVALID_HIGH_LOW",
+
+                index + 2,
+
+                "High price is lower than Low."
+
+            );
+
+            return;
 
         }
 
         if (candle.high < candle.open) {
 
-            return false;
+            addWarning(
+
+                "INVALID_OPEN",
+
+                index + 2,
+
+                "Open price is above High."
+
+            );
+
+            return;
 
         }
 
         if (candle.high < candle.close) {
 
-            return false;
+            addWarning(
+
+                "INVALID_CLOSE",
+
+                index + 2,
+
+                "Close price is above High."
+
+            );
+
+            return;
 
         }
 
         if (candle.low > candle.open) {
 
-            return false;
+            addWarning(
+
+                "INVALID_OPEN",
+
+                index + 2,
+
+                "Open price is below Low."
+
+            );
+
+            return;
 
         }
 
         if (candle.low > candle.close) {
 
-            return false;
+            addWarning(
+
+                "INVALID_CLOSE",
+
+                index + 2,
+
+                "Close price is below Low."
+
+            );
+
+            return;
 
         }
 
-        return true;
+        validData.push(candle);
 
     });
+
+    return validData;
 
 }
 
@@ -349,6 +464,38 @@ function getMarketData() {
 }
 
 /* ==========================================
+   HAS WARNINGS
+========================================== */
+
+function hasWarnings() {
+
+    return csvWarnings.length > 0;
+
+}
+
+/* ==========================================
+   WARNING COUNT
+========================================== */
+
+function getWarningCount() {
+
+    return csvWarnings.length;
+
+}
+
+/* ==========================================
+   VALID CANDLE COUNT
+========================================== */
+
+function getCandleCount() {
+
+    return marketData.length;
+
+}
+
+
+
+/* ==========================================
    CLEAR DATA
 ========================================== */
 
@@ -357,3 +504,47 @@ function clearMarketData() {
     marketData = [];
 
 }
+
+/* ==========================================
+   CSV CONFIG
+========================================== */
+
+const CSV_CONFIG = {
+
+SUPPORTED_DELIMITERS:[",",";","\t"],
+
+DATE_COLUMNS:[
+"date",
+"datetime",
+"timestamp"
+],
+
+TIME_COLUMNS:[
+"time"
+],
+
+OPEN_COLUMNS:[
+"open","o"
+]
+
+};
+
+/* ==========================================
+   CSV STATISTICS
+========================================== */
+
+csvStats = {
+
+rowsRead:0,
+
+rowsValid:0,
+
+rowsSkipped:0,
+
+invalidRows:[]
+
+}
+
+
+
+
