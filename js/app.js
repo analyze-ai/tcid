@@ -11,18 +11,6 @@ const analyzeBtn = document.getElementById("analyzeBtn");
 const csvStatus = document.getElementById("csvStatusVal");
 const statusVal = document.getElementById("statusVal");
 
-const chooseBtn = document.querySelector(".btn-outline");
-
-/* ==========================================
-   OPEN FILE
-========================================== */
-
-chooseBtn.addEventListener("click", () => {
-
-    fileInput.click();
-
-});
-
 /* ==========================================
    FILE SELECTED
 ========================================== */
